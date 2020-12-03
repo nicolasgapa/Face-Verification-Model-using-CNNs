@@ -12,3 +12,5 @@ The inputs are the following:
                  The directory must include the images that you want to test. It should NOT contain folders. 
                  Refer to the 'test_images' folder in this repository.
     - Epochs: Number of training iterations (epochs) in TensorFlow.
+    
+ 
