@@ -96,7 +96,6 @@ def list_to_flatten(list_of_images, dims):
     return images
 
 # CNN Models
-learning_rate = None
 
 # LeNet5
 if cnn_architecture == 'LeNet5':
