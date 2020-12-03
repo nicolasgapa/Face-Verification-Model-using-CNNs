@@ -14,4 +14,4 @@ The inputs are the following:
     - Epochs: Number of training iterations (epochs) in TensorFlow.
     
  
-<img src="siamese_network.jpeg" width="400"  />
+<img src="siamese_network.JPG" width="400"  />
