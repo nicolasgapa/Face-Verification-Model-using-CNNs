@@ -7,7 +7,7 @@ Original file is located at
     https://colab.research.google.com/drive/1VBowq7FpWtV-55jpZaxvvdeMCbZwRvK_
 """
 
-# Mount drive.
+# Mount drive (If you are running from Google Colab).
 from google.colab import drive
 drive.mount('/content/drive')
 
@@ -111,6 +111,8 @@ if cnn_architecture == 'LeNet5':
   selected_model = LeNet5
 
 # AlexNet
+# This implementation was written based on an existing model developed by Eddie Weill, which can be found in the following link:
+# https://github.com/eweill/keras-deepcv/blob/master/models/classification/alexnet.py 
 elif cnn_architecture == 'AlexNet':
   image_dimension = 224
   input_shape = ((image_dimension**2) * 3 ,)
@@ -133,6 +135,8 @@ elif cnn_architecture == 'AlexNet':
   selected_model = AlexNet
 
 # VGGNet
+# This implementation was written based on an existing model developed by Taehoon Lee, which can be found in the following link:
+# https://github.com/keras-team/keras-applications/blob/master/keras_applications/vgg16.py 
 elif cnn_architecture == 'VGG19':
   image_dimension = 224
   input_shape = ((image_dimension**2) * 3 ,)
@@ -157,7 +161,7 @@ elif cnn_architecture == 'GoogleNet':
   "Simplified version of GoogleNet, using only the first few layers of the CNN"
   image_dimension = 224
   input_shape = ((image_dimension**2) * 3 ,)
-  selected_model = tf.keras.models.Sequential([
+  googlenet = tf.keras.models.Sequential([
       Reshape(input_shape=input_shape, target_shape=(image_dimension, image_dimension, 3)),
       Conv2D(64, (7, 7), padding='same', strides=(2, 2), activation='relu'),
       MaxPooling2D((3, 3), padding='same', strides=(2, 2)),
@@ -165,16 +169,18 @@ elif cnn_architecture == 'GoogleNet':
       Conv2D(192, (3, 3), padding='same', strides=(1, 1), activation='relu'),
       MaxPooling2D((3, 3), padding='same', strides=(2, 2)),
       tf.keras.layers.Flatten()])
+  selected_model = googlenet
 
 # CNN model function
+# This function is based on an existing model developed by Shubham Panchal, which can be found in the following repository:
+# https://github.com/shubham0204/Face_Recognition_with_TF/blob/master/SiameseModel.py
 def cnn_model(dims):
     input_shape = ((dims**2) * 3 ,)
-    seq_model = selected_model
-    input_x1, input_x2 = Input(shape=input_shape), Input(shape=input_shape)
-    output_x1, output_x2 = selected_model(input_x1), selected_model(input_x2)
-    distance_euclid = Lambda(lambda t: K.abs(t[0] - t[1]))([output_x1 , output_x2])
-    outputs = Dense(1, activation=activations.sigmoid)(distance_euclid)
-    return models.Model([input_x1 , input_x2], outputs)
+    input_1, input_2 = Input(shape=input_shape), Input(shape=input_shape)
+    output_1, output_2 = selected_model(input_1), selected_model(input_2)
+    distance_euclidean = Lambda(lambda t: K.abs(t[0] - t[1]))([output_1 , output_2])
+    outputs = Dense(1, activation="sigmoid")(distance_euclidean)
+    return models.Model([input_1, input_2], outputs)
 
 # CODE
 C1, C2, Y = data_pre_processing(directory, image_dimension)
@@ -194,7 +200,7 @@ model.load_weights('model_' + str(image_dimension) + '.h5')
 
 # Plot learning rate vs loss.
 plt.semilogx(history.history["lr"], history.history["loss"])
-plt.axis([1e-4, 1e-1, 0., 1])
+plt.axis([1e-4, 1e-2, 0., 1])
 plt.xlabel('Learning rate')
 plt.ylabel('Loss')
 
