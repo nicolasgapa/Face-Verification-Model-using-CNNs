@@ -6,7 +6,7 @@ The inputs are the following:
           
     - CNN architecture: Choose one of the following: 'LeNet5', 'AlexNet', 'VGG19', or 'GoogleNet'
     - Directory: Directory to the training set images. 
-                 The directory must contain one folder per person. Each folder must include 4-5 images of that person.
+                 The directory must contain one folder per person. Each folder must include a minimum of 5 images of that person.
                  Refer to the 'people' folder in this repository.
     - Test directory: Directory to the validation set images. 
                  The directory must include the images that you want to test. It should NOT contain folders. 
